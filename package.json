@@ -10,6 +10,7 @@
     "server": "npm run watch --prefix server",
     "client": "npm run start --prefix client",
     "watch": "concurrently \"npm run server\" \"npm run client\"",
+    "deploy": "npm run build --prefix client && npm run start --prefix server",
     "test": "npm run test --prefix server && npm run test --prefix client"
   },
   "keywords": [],
@@ -17,5 +18,8 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^9.2.0"
+  },
+  "dependencies": {
+    "nasa-project": "file:"
   }
 }

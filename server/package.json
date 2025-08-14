@@ -1,7 +1,7 @@
 {
   "name": "nasa-project-api",
   "version": "1.0.0",
-  "description": "NASA Mission Control API",
+  "description": "NASA Mission Control Project",
   "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,7 +14,9 @@
   "dependencies": {
     "cors": "^2.8.5",
     "csv-parse": "^6.1.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "morgan": "^1.10.1",
+    "nasa-project-api": "file:"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
