@@ -4,7 +4,8 @@
   "description": "NASA Mission Control Project",
   "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test-watch": "jest --watch",
     "watch": "nodemon src/server.js",
     "start": "node src/server.js"
   },
@@ -19,6 +20,8 @@
     "nasa-project-api": "file:"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "jest": "^30.0.5",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.4"
   }
 }
