@@ -9,7 +9,7 @@ describe('Test GET /launches', () => {
         .expect('Content-Type', /json/);
         // expect(response.statusCode).toBe(200);
     });
-})
+});
 
 describe('Test POST /launch', () => {
 
