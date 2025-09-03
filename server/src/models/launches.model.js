@@ -18,32 +18,31 @@ const launch = {
 
 saveLaunch(launch);
 
-function existLaunchWithId(launchId) {
-  return launches.has(launchId);
+async function existLaunchWithId(launchId) {
+  return await launchesDatabase.findOne({ flightNumber: launchId });
 }
 
-async function getLatestFlightNumber(){
+async function getLatestFlightNumber() {
   const latestLauch = await launchesDatabase.findOne().sort("-flightNumber");
-  if(!latestLauch) {
+  if (!latestLauch) {
     return DEFAULT_FLIGHT_NUMBER;
   }
 
   return latestLauch.flightNumber;
-
 }
 
 async function getAllLaunches() {
-  return await launchesDatabase.find({}, {'_id': 0, '__v': 0});
+  return await launchesDatabase.find({}, { _id: 0, __v: 0 });
 }
 
 async function saveLaunch(launch) {
-  const planet = await planets.findOne({keplerName: launch.target});
+  const planet = await planets.findOne({ keplerName: launch.target });
 
-  if(!planet) {
+  if (!planet) {
     throw new Error("No matching planet found");
   }
 
-  await launchesDatabase.updateOne(
+  await launchesDatabase.findOneAndUpdate(
     {
       flightNumber: launch.flightNumber,
     },
@@ -55,8 +54,7 @@ async function saveLaunch(launch) {
 }
 
 async function schdeuleNewLaunch(launch) {
-  const newFlightNumber = await getLatestFlightNumber() + 1;
-
+  const newFlightNumber = (await getLatestFlightNumber()) + 1;
 
   const newLaunch = Object.assign(launch, {
     customers: ["ZTM", "NASA"],
@@ -65,15 +63,20 @@ async function schdeuleNewLaunch(launch) {
     flightNumber: newFlightNumber,
   });
 
-  await saveLaunch(newLaunch)
+  await saveLaunch(newLaunch);
 }
 
-
-function abortLaunchById(launchId) {
-  const aborted = launches.get(launchId);
-  aborted.upcoming = false;
-  aborted.success = false;
-  return aborted;
+async function abortLaunchById(launchId) {
+  const aborted = await launchesDatabase.updateOne(
+    {
+      flightNumber: launchId,
+    },
+    {
+      upcoming: false,
+      success: false,
+    },
+  );
+  return aborted.ok === 1 && aborted.nModified === 1;
 }
 
 module.exports = {
