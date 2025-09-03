@@ -1,7 +1,22 @@
 const request = require('supertest');
 const app = require('../../app');
+const {mongoConnect, mongoDisconnect} = require('../../services/mongo');
+const {loadPlanetsData} = require('../../models/planets.model');
+const {loadLaunchData} = require('../../models/launches.model');
 
-describe('Test GET /launches', () => {
+describe('Launches API', () => {
+
+    beforeAll(async () => {
+        await mongoConnect();
+        await loadPlanetsData();
+        await loadLaunchData();
+    }, 30000);
+
+    afterAll(async () => {
+        await mongoDisconnect();
+    });
+
+    describe('Test GET /launches', () => {
     test('It should respond with 200 success', async () => {
         const response = await request(app)
         .get('/launches')
@@ -71,4 +86,20 @@ describe('Test POST /launch', () => {
             error: 'Invalid launch date',
         });
     });
+});
+
+describe('Test DELETE /launches/:id', () => {
+    test('It should respond with 404 for non-existent launch', async () => {
+        const response = await request(app)
+            .delete('/launches/999999')
+            .expect(404)
+            .expect('Content-Type', /json/);
+        
+        expect(response.body).toStrictEqual({
+            error: 'Launch not found',
+        });
+    });
+});
+
 })
+

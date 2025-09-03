@@ -1,4 +1,4 @@
-const {getAllLaunches, schdeuleNewLaunch, existLaunchWithId, abortLaunchById} = require("../../models/launches.model");
+const {getAllLaunches, scheduleNewLaunch, existLaunchWithId, abortLaunchById} = require("../../models/launches.model");
 
 async function httpGetAllLaunches(req, res){
     return res.status(200).json(await getAllLaunches());
@@ -20,7 +20,7 @@ async function httpAddNewLaunch(req, res) {
         });
     }
 
-    await schdeuleNewLaunch(launch)
+    await scheduleNewLaunch(launch)
     return res.status(201).json(launch);
 }
 
@@ -36,6 +36,7 @@ async function httpAbortLaunch(req, res) {
     }
     const aborted = await abortLaunchById(launchId);
     console.log("Abort Result: ", aborted);
+    
     if(!aborted) {
         return res.status(400).json({
             error: "Launch not aborted"

@@ -45,9 +45,10 @@ async function httpAbortLaunch(id) {
   // TODO: Once API is ready.
   // Delete launch with given ID.
   try{
-    return await fetch(`${API_URL}/launches/${id}`, {
+    const response = await fetch(`${API_URL}/launches/${id}`, {
       method: 'DELETE',
     });
+    return response;
   }catch (error) {
     console.error('Error aborting launch:', error);
     return {

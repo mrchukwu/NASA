@@ -4,7 +4,7 @@
   "description": "NASA Mission Control Project",
   "main": "src/server.js",
   "scripts": {
-    "test": "jest",
+    "test": "cross-env NODE_ENV=test jest",
     "test-watch": "jest --watch",
     "watch": "nodemon src/server.js",
     "start": "node src/server.js",
@@ -13,6 +13,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "jest": {
+    "testEnvironment": "node"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "csv-parse": "^6.1.0",
@@ -23,6 +26,7 @@
     "pm2": "^6.0.8"
   },
   "devDependencies": {
+    "cross-env": "^10.0.0",
     "jest": "^30.0.5",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.4"

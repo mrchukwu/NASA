@@ -16,7 +16,19 @@ const launch = {
   success: true,
 };
 
-saveLaunch(launch);
+async function loadLaunchData() {
+  const firstLaunch = await launchesDatabase.findOne({
+    flightNumber: 100,
+    mission: "Kepler Exploration X",
+    rocket: "Explorer IS1"
+  });
+  
+  if (firstLaunch) {
+    console.log('Launch data already loaded!');
+  } else {
+    await saveLaunch(launch);
+  }
+}
 
 async function existLaunchWithId(launchId) {
   return await launchesDatabase.findOne({ flightNumber: launchId });
@@ -53,7 +65,7 @@ async function saveLaunch(launch) {
   );
 }
 
-async function schdeuleNewLaunch(launch) {
+async function scheduleNewLaunch(launch) {
   const newFlightNumber = (await getLatestFlightNumber()) + 1;
 
   const newLaunch = Object.assign(launch, {
@@ -72,16 +84,18 @@ async function abortLaunchById(launchId) {
       flightNumber: launchId,
     },
     {
-      upcoming: false,
-      success: false,
+      $set:
+      {upcoming: false,
+      success: false,}
     },
   );
-  return aborted.ok === 1 && aborted.nModified === 1;
+  return aborted.modifiedCount === 1;
 }
 
 module.exports = {
+  loadLaunchData,
   existLaunchWithId,
   getAllLaunches,
   abortLaunchById,
-  schdeuleNewLaunch,
+  scheduleNewLaunch,
 };
